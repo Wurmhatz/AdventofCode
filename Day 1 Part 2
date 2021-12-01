@@ -1,0 +1,14 @@
+import os
+import numpy as np
+
+os.chdir('/Users/Helgi/Python/AdventofCode2021/Day 1')
+
+depthsList = np.loadtxt('depths.csv', np.dtype(int), unpack=True, delimiter=',', usecols=0, skiprows=0)
+
+depthIncrease = 0
+
+for i in range(len(depthsList) - 3):
+    if (depthsList[i] + depthsList[i+1] + depthsList[i+2]) < (depthsList[i+1] + depthsList[i+2] + depthsList[i+3]):
+        depthIncrease += 1
+
+print('There was a total of ' + str(depthIncrease) + ' increases in depth')   

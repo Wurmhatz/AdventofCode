@@ -1,8 +1,6 @@
 import os
 import numpy as np
 
-os.chdir('/Users/Helgi/Python/AdventofCode2021/Day 1')
-
 depthsList = np.loadtxt('depths.csv', np.dtype(int), unpack=True, delimiter=',', usecols=0, skiprows=0)
 
 depthIncrease = 0

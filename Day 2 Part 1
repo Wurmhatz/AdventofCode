@@ -16,7 +16,5 @@ for i in range(0, len(directions), 2):
         verticalPosition -= int(directions[i+1]) 
     elif directions[i] == 'forward':
         horizontalPosition += int(directions[i+1]) 
-    elif directions[i] == 'up':
-        horizontalPosition -= int(directions[i+1]) 
 
 print('The vertical position is: ' + str(verticalPosition) + ', the horizontal position is ' + str(horizontalPosition) + ' and their product is ' + str(verticalPosition * horizontalPosition))

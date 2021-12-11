@@ -1,0 +1,22 @@
+import os
+import numpy as np
+
+horizontalPosition = 0
+verticalPosition = 0
+
+arrdirections = np.loadtxt('input.txt', np.dtype(str), delimiter=' ')
+lisdirections = np.ndarray.tolist(arrdirections)
+directions = [item for sublist in lisdirections for item in sublist]
+
+
+for i in range(0, len(directions), 2):
+    if directions[i] == 'down':
+        verticalPosition += int(directions[i+1])
+    elif directions[i] == 'up':
+        verticalPosition -= int(directions[i+1]) 
+    elif directions[i] == 'forward':
+        horizontalPosition += int(directions[i+1]) 
+    elif directions[i] == 'up':
+        horizontalPosition -= int(directions[i+1]) 
+
+print('The vertical position is: ' + str(verticalPosition) + ', the horizontal position is ' + str(horizontalPosition) + ' and their product is ' + str(verticalPosition * horizontalPosition))

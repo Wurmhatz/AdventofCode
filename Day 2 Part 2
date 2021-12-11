@@ -1,0 +1,17 @@
+import os
+import numpy as np
+
+aim = 0
+horizontalPosition = 0
+verticalPosition = 0
+
+for i in range(0, len(directions), 2):
+    if directions[i] == 'down':
+        aim += int(directions[i+1])
+    elif directions[i] == 'up':
+        aim -= int(directions[i+1])
+    elif directions[i] == 'forward':
+        horizontalPosition += int(directions[i+1])
+        verticalPosition += (int(directions[i+1]) * aim)
+
+print('For part 2, the vertical position is: ' + str(verticalPosition) + ', the horizontal position is ' + str(horizontalPosition) + ' and their product is ' + str(verticalPosition * horizontalPosition))

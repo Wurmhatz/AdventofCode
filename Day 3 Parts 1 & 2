@@ -1,0 +1,138 @@
+import os
+
+#Needed to read binary numbers.
+from typing import BinaryIO
+import numpy as np
+
+#Part 1
+
+gammaValue = []
+epsilonValue = []
+gammaStrValue = ''
+epsilonStrValue = ''
+
+arrData = np.genfromtxt('input.txt', np.dtype(str), delimiter='\n')
+
+listData = np.ndarray.tolist(arrData)
+
+#Gives the length of the item in the file to be used in formating array.
+textLen = int(len(listData[0]))
+
+#Combines all items into a single large list and then converts that list to a 2D Numpy array with columns equal to original data charater length. Number of rows is determined automatically with -1 value.
+megaList = [item for sublist in listData for item in sublist]
+megaArr = np.array(megaList).reshape(-1, textLen)
+
+#This loop iterates through the columns of the large array and determines the most common integer from each column.
+for i in range(0, textLen):
+    column = megaArr[: , i]
+    columnInteger = []
+
+    for j in range(0, len(column)):
+        columnInteger.append(int(column[j]))    
+
+    currentValue = np.bincount(columnInteger).argmax()
+    gammaValue.append(currentValue)
+
+#This loop iterates through the previous array and inverts the 0 and 1 values.
+for k in range(0, len(gammaValue)):
+    if gammaValue[k] == 0:
+        epsilonValue.append(1)
+    else:
+        epsilonValue.append(0)
+
+
+#This loop converts the above arrays into a single string value of the individual numbers.
+for l in range(0, len(gammaValue)):
+    epsilonStrValue = epsilonStrValue + (str(epsilonValue[l]))
+    gammaStrValue = gammaStrValue + (str(gammaValue[l]))
+
+#Converts the strings into binary numbers.
+gammaBinValue = int(gammaStrValue, base=2)
+epsilonBinValue = int(epsilonStrValue, base=2)
+
+print ('The power output reading is: ' + str(gammaBinValue * epsilonBinValue))
+
+
+#Part 2
+
+oxy_Gen_Rating = ''
+co2_Scrub_Rating = ''
+
+co2MegaArr = megaArr
+oxMegaArr = megaArr
+
+
+while len(oxMegaArr) != 1:
+    for i in range(0, textLen):
+        column = oxMegaArr[: , i]
+        columnInteger = []
+        delOxItems = []
+        oneIndex = 0
+        zeroIndex = 0
+        mostCommonValue = ''
+
+        for j in range(0, len(column)):
+            columnInteger.append(int(column[j]))    
+
+        for k in range(0, len(columnInteger)):
+            if columnInteger[k] == 1:
+                oneIndex += 1
+            else:
+                zeroIndex += 1
+            
+            if oneIndex >= zeroIndex:
+                mostCommonValue = '1'
+            else:
+                mostCommonValue = '0'
+
+        for l in range(0, len(oxMegaArr)):
+            if oxMegaArr[l , i] != mostCommonValue:
+                delOxItems.append(l)
+        
+        oxMegaArr = np.delete(oxMegaArr, delOxItems, axis=0)
+
+
+while len(co2MegaArr) > 1:
+    for i in range(0, textLen):
+        columnCo2 = co2MegaArr[: , i]
+        columnCo2Integer = []
+        delCo2Items = []
+        oneIndex = 0
+        zeroIndex = 0
+        leastCommonValue = ''
+
+        for j in range(0, len(columnCo2)):
+            columnCo2Integer.append(int(columnCo2[j]))    
+
+        for k in range(0, len(columnCo2Integer)):
+            if columnCo2Integer[k] == 1:
+                oneIndex += 1
+            else:
+                zeroIndex += 1
+            
+            if oneIndex >= zeroIndex:
+                leastCommonValue = '0'
+            else:
+                leastCommonValue = '1'
+
+        for l in range(0, len(co2MegaArr)):
+            if co2MegaArr[l , i] != leastCommonValue:
+                delCo2Items.append(l)
+
+        if len(delCo2Items) < len(co2MegaArr):
+            co2MegaArr = np.delete(co2MegaArr, delCo2Items, axis=0)
+        else:
+            break
+
+oxMegaArr = oxMegaArr.flatten()
+co2MegaArr = co2MegaArr.flatten()
+
+for m in range(0, len(co2MegaArr)):
+    oxy_Gen_Rating = oxy_Gen_Rating + oxMegaArr[m]
+    co2_Scrub_Rating = co2_Scrub_Rating + co2MegaArr[m]
+
+
+oxy_Gen_Rating = int(oxy_Gen_Rating, base=2)
+co2_Scrub_Rating = int(co2_Scrub_Rating, base=2)
+
+print ('The life support rating is: ' + str(oxy_Gen_Rating * co2_Scrub_Rating))
